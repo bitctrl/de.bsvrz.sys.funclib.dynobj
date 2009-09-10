@@ -94,6 +94,23 @@ public final class DynamischeObjekte {
 	}
 
 	/**
+	 * die Funktion entfernt alle Elemente aus der übergebenen Menge. Optional
+	 * können die aus der Menge entfernten Objekte auch selbst entfernt werden.
+	 * 
+	 * @param menge
+	 *            die Menge, die geleert werden soll
+	 * @param loescheObjekte
+	 *            <code>true</code>, wenn die aus der Menge entferneten Objekte
+	 *            auch selbst entfernt werden sollen
+	 * @throws DynObjektException
+	 *             die Menge konnte nicht geleert werden oder das Löschen der
+	 *             Objekte ist fehlgeschlagen.
+	 */
+	public void entferneAlleObjekteAusMenge(final MutableCollection menge,
+			final boolean loescheObjekte) throws DynObjektException {
+	}
+
+	/**
 	 * die Funktion entfernt das übergebene Objekt aus der übergebenen Menge.
 	 * Optional kann über den Parameter <i>loescheObjekt</i> definiert werden,
 	 * ob das Objekt selbst auch entfernt wird.
@@ -278,23 +295,6 @@ public final class DynamischeObjekte {
 	public boolean fuegeObjektInMengeEin(final DynamicObject objekt,
 			final MutableCollection menge) throws DynObjektException {
 		return false;
-	}
-
-	/**
-	 * die Funktion entfernt alle Elemente aus der übergebenen Menge. Optional
-	 * können die aus der Menge entfernten Objekte auch selbst entfernt werden.
-	 * 
-	 * @param menge
-	 *            die Menge, die geleert werden soll
-	 * @param loescheObjekte
-	 *            <code>true</code>, wenn die aus der Menge entferneten Objekte
-	 *            auch selbst entfernt werden sollen
-	 * @throws DynObjektException
-	 *             die Menge konnte nicht geleert werden oder das Löschen der
-	 *             Objekte ist fehlgeschlagen.
-	 */
-	public void leereMenge(final MutableCollection menge,
-			final boolean loescheObjekte) throws DynObjektException {
 	}
 
 	/**
