@@ -26,15 +26,22 @@
 
 package de.bsvrz.sys.funclib.dynobj;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.bsvrz.dav.daf.main.ClientDavInterface;
 import de.bsvrz.dav.daf.main.DataAndATGUsageInformation;
+import de.bsvrz.dav.daf.main.DavConnectionListener;
+import de.bsvrz.dav.daf.main.config.ConfigurationArea;
 import de.bsvrz.dav.daf.main.config.ConfigurationChangeException;
 import de.bsvrz.dav.daf.main.config.DynamicObject;
 import de.bsvrz.dav.daf.main.config.DynamicObjectType;
 import de.bsvrz.dav.daf.main.config.MutableCollection;
+import de.bsvrz.dav.daf.main.config.MutableSet;
 import de.bsvrz.dav.daf.main.config.SystemObject;
+import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
  * Die Klasse beschreibt ein Objekt, mit dem die Verwaltung von dynamischen
@@ -62,24 +69,47 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$
  */
-public final class DynamischeObjekte {
+public final class DynamischeObjekte implements DavConnectionListener {
+
+	/** die Menge der angelegten Instanzen von Verwaltungsobjekten. */
+	private static Map<ClientDavInterface, DynamischeObjekte> instanzen = new HashMap<ClientDavInterface, DynamischeObjekte>();
 
 	/**
 	 * Funktion zum Erzeugen eines Verwaltungsobjekts für dynamische Objekte.
 	 * Die Instanzen der Objekte sind Singletons pro Datenverteilerverbindung
 	 * und werden intern innerhalb der Klasse verwaltet.
 	 * 
+	 * Eine Instanz eines Verwaltungsobjektes wird aus der internen Verwaltung
+	 * freigegeben, wenn die übergebene Datenverteilerverbindung geschlossen
+	 * wird. Die Datenverteilerverbindung, mit dem eine solche Instanz abgerufen
+	 * wird sollte daher immer eine aktive Verbindung haben, ansonsten besteht
+	 * hier die Gefahr eines Memory-Leaks.
+	 * 
+	 * Die Datenverteilerverbindung muss unbedingt übergeben werden, der Wert
+	 * <code>null</code> ist nicht zulässig.
+	 * 
 	 * @param dav
 	 *            die Datenverteilerverbindung über die dynamische Objekte
 	 *            verwaltet werden sollen
+	 * 
 	 * @return eine Instanz zur Verwaltung dynamischer Objekte
 	 */
 	public static DynamischeObjekte getInstanz(final ClientDavInterface dav) {
-		return null;
+		assert (dav != null);
+
+		DynamischeObjekte result = DynamischeObjekte.instanzen.get(dav);
+		if (result == null) {
+			result = new DynamischeObjekte(dav);
+			DynamischeObjekte.instanzen.put(dav, result);
+		}
+		return result;
 	}
 
 	/** die verwendete Datenverteilerverbindung. */
 	private final ClientDavInterface verbindung;
+
+	/** die Verwaltung der Zuordnungen von Typ zu Konfigurationsbereich. */
+	private final ZuordnungsVerwaltung zuordnung;
 
 	/**
 	 * Privater Konstruktor für eine Verwaltungsobjekt. Der Zugriff auf die
@@ -90,24 +120,107 @@ public final class DynamischeObjekte {
 	 *            die verwendete Datenverteilerverbindung
 	 */
 	private DynamischeObjekte(final ClientDavInterface verbindung) {
+		assert (verbindung != null);
 		this.verbindung = verbindung;
+		verbindung.addConnectionListener(this);
+
+		zuordnung = new ZuordnungsVerwaltung(verbindung);
+	}
+
+	/**
+	 * die Funktion entfernt alle Elemente aus der übergebenen Menge, die nicht
+	 * mehr gültig sind.
+	 * 
+	 * @param menge
+	 *            die Menge, die geleert werden soll
+	 * @throws ObjekteAusMengeEntfernenException
+	 *             die Menge konnte nicht bereinigt werden.
+	 */
+	public void bereinigeMenge(final MutableSet menge)
+			throws ObjekteAusMengeEntfernenException {
+
+		assert (menge != null);
+
+		Collection<SystemObject> elemente = new ArrayList<SystemObject>();
+
+		for (SystemObject element : elemente) {
+			if (!element.isValid()) {
+				elemente.add(element);
+			}
+		}
+		if (elemente.size() > 0) {
+			try {
+				menge.remove(elemente
+						.toArray(new SystemObject[elemente.size()]));
+			} catch (ConfigurationChangeException e) {
+				Debug.getLogger().error(e.getLocalizedMessage());
+				throw new ObjekteAusMengeEntfernenException(
+						"Es konnten nicht alle ungültigen Elemente aus der Menge entfernt werden!",
+						elemente);
+			}
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void connectionClosed(final ClientDavInterface connection) {
+		DynamischeObjekte.instanzen.remove(verbindung);
 	}
 
 	/**
 	 * die Funktion entfernt alle Elemente aus der übergebenen Menge. Optional
 	 * können die aus der Menge entfernten Objekte auch selbst entfernt werden.
 	 * 
+	 * Wenn das Entfernen der Elemente aus der Menge bereits fehlschlägt, werden
+	 * die Objekte auch nicht gelöscht.
+	 * 
 	 * @param menge
 	 *            die Menge, die geleert werden soll
 	 * @param loescheObjekte
 	 *            <code>true</code>, wenn die aus der Menge entferneten Objekte
 	 *            auch selbst entfernt werden sollen
-	 * @throws DynObjektException
-	 *             die Menge konnte nicht geleert werden oder das Löschen der
-	 *             Objekte ist fehlgeschlagen.
+	 * @throws ObjekteAusMengeEntfernenException
+	 *             die Menge konnte nicht geleert werden
+	 * @throws ObjektLoeschenException
+	 *             das Löschen der Objekte ist fehlgeschlagen.
 	 */
-	public void entferneAlleObjekteAusMenge(final MutableCollection menge,
-			final boolean loescheObjekte) throws DynObjektException {
+	public void entferneAlleObjekteAusMenge(final MutableSet menge,
+			final boolean loescheObjekte)
+			throws ObjekteAusMengeEntfernenException, ObjektLoeschenException {
+
+		assert (menge != null);
+
+		Collection<SystemObject> elemente = new ArrayList<SystemObject>();
+		elemente.addAll(menge.getElements());
+		if (elemente.size() > 0) {
+			try {
+				menge.remove(elemente
+						.toArray(new SystemObject[elemente.size()]));
+			} catch (ConfigurationChangeException e) {
+				Debug.getLogger().error(e.getLocalizedMessage());
+				throw new ObjekteAusMengeEntfernenException(
+						"Es konnten nicht alle Elemente aus der Menge entfernt werden!",
+						elemente);
+			}
+
+			if (loescheObjekte) {
+				for (SystemObject element : new ArrayList<SystemObject>(
+						elemente)) {
+					try {
+						element.invalidate();
+						elemente.remove(element);
+					} catch (ConfigurationChangeException e) {
+						Debug.getLogger().error(e.getLocalizedMessage());
+					}
+				}
+
+				if (elemente.size() > 0) {
+					throw new ObjektLoeschenException(
+							"Es konnten nicht alle Elemente gelöscht werden!",
+							elemente);
+				}
+			}
+		}
 	}
 
 	/**
@@ -137,15 +250,48 @@ public final class DynamischeObjekte {
 	 *            die Menge aus der ein Objekt entfernt werden soll
 	 * @param loescheObjekt
 	 *            definiert, ob das Objekt selbst ebenfalls gelöscht werden soll
-	 * @return true, wenn das Objekt entfernt wurde
-	 * @throws DynObjektException
-	 *             das Objekt konnte nicht aus der Menge entfernt oder nicht
-	 *             gelöscht werden
+	 * 
+	 * @return <code>true</code>, wenn das Objekt entfernt wurde
+	 * 
+	 * @throws ObjekteAusMengeEntfernenException
+	 *             das Objekt konnte nicht aus der Menge entfernt werden
+	 * @throws ObjektLoeschenException
+	 *             das Objekt konnte nicht gelöscht werden
 	 */
 	public boolean entferneObjektAusMenge(final DynamicObject objekt,
-			final MutableCollection menge, final boolean loescheObjekt)
-			throws DynObjektException {
-		return false;
+			final MutableSet menge, final boolean loescheObjekt)
+			throws ObjekteAusMengeEntfernenException, ObjektLoeschenException {
+
+		assert (menge != null);
+		assert (objekt != null);
+
+		boolean result = false;
+
+		if (menge.getElements().contains(objekt)) {
+			try {
+				menge.remove(objekt);
+			} catch (ConfigurationChangeException e) {
+				Debug.getLogger().error(e.getLocalizedMessage());
+				throw new ObjekteAusMengeEntfernenException("Das Objekt: "
+						+ objekt
+						+ " konnte nicht aus der Menge entfernt werden!",
+						objekt);
+			}
+
+			if (loescheObjekt) {
+				try {
+					objekt.invalidate();
+				} catch (ConfigurationChangeException e) {
+					Debug.getLogger().error(e.getLocalizedMessage());
+					throw new ObjektLoeschenException("Das Element " + objekt
+							+ " konnte nicht entfernt werden!", objekt);
+				}
+			}
+
+			result = true;
+		}
+
+		return result;
 	}
 
 	/**
@@ -240,7 +386,35 @@ public final class DynamischeObjekte {
 			final String name, final String pid,
 			final Collection<DataAndATGUsageInformation> konfigurationsDaten,
 			final MutableCollection menge) throws DynObjektException {
-		return null;
+
+		if (zuordnung == null) {
+			throw new DynObjektException(
+					"Die Zuordnungstabelle zum Anlegen dynamischer Objekte ist nicht verfügbar!");
+		}
+
+		ConfigurationArea kb = zuordnung.getKonfigurationsBereich(typ);
+		if (kb == null) {
+			throw new DynObjektException(
+					"Es konnte kein Konfigurationsbereich zum Anlegen von Objekten des Typs: "
+							+ typ + " ermittelt werden!");
+		}
+
+		try {
+			DynamicObject result = null;
+			if (konfigurationsDaten == null) {
+				result = kb.createDynamicObject(typ, pid, name);
+			} else {
+				result = kb.createDynamicObject(typ, pid, name,
+						konfigurationsDaten);
+			}
+
+			return result;
+
+		} catch (ConfigurationChangeException e) {
+			throw new DynObjektException(
+					"Das dynamische Objekt konnte nicht angelegt werden: "
+							+ e.getLocalizedMessage());
+		}
 	}
 
 	/**

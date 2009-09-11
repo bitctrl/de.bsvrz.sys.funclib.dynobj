@@ -26,31 +26,41 @@
 
 package de.bsvrz.sys.funclib.dynobj;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import de.bsvrz.dav.daf.main.config.SystemObject;
+
 /**
  * Eine Exception, die auftreten kann, wenn dynamische Objekte mit Hilfe eines
  * Verwaltungsobjekts von Typ {@link DynamischeObjekte} angelegt und/oder
  * entfernt werden sollen.
  * 
- * Konkrete Exceptions, die verschiedene Fälle von Ausnahmen beschreiben
- * erweitern diese Klasse.
+ * Die Exception enthält eine Liste der Objekte, die nicht angelegt oder
+ * entfernt werden konnten.
  * 
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$
  */
-public class DynObjektException extends Exception {
+public abstract class DynObjektElementException extends DynObjektException {
 
-	/** Standard-Konstruktor. */
-	public DynObjektException() {
-		super();
+	Collection<SystemObject> fehlerListe = new ArrayList<SystemObject>();
+
+	public DynObjektElementException(final String meldung,
+			final Collection<SystemObject> elemente) {
+		super(meldung);
+		fehlerListe.addAll(elemente);
 	}
 
-	/**
-	 * Konstruktor mit Angabe eines beschreibenden Textes.
-	 * 
-	 * @param meldung
-	 *            der beschreibende Text
-	 */
-	public DynObjektException(final String meldung) {
+	public DynObjektElementException(final String meldung,
+			final SystemObject... elemente) {
 		super(meldung);
+		for (SystemObject element : elemente) {
+			fehlerListe.add(element);
+		}
+	}
+
+	public Collection<SystemObject> getElemente() {
+		return fehlerListe;
 	}
 }

@@ -25,8 +25,10 @@
  */
 
 /**
- * Klassen für die Verwaltung dynamsicher Objekte in einem Datenverteilersystem.
- *
+ * Klassen für die Verwaltung dynamischer Objekte in einem Datenverteilersystem.
+ * 
+ * @author BitCtrl Systems GmbH, Uwe Peuker
+ * @version $Id$
  * @since 1.0
  */
 package de.bsvrz.sys.funclib.dynobj;
