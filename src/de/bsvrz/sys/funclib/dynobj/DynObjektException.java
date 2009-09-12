@@ -26,23 +26,29 @@
 
 package de.bsvrz.sys.funclib.dynobj;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import de.bsvrz.dav.daf.main.config.SystemObject;
+
 /**
  * Eine Exception, die auftreten kann, wenn dynamische Objekte mit Hilfe eines
  * Verwaltungsobjekts von Typ {@link DynamischeObjekte} angelegt und/oder
- * entfernt werden sollen.
+ * entfernt bzw. in Mengen eingetragen/entfernt werden sollen.
  * 
- * Konkrete Exceptions, die verschiedene Fälle von Ausnahmen beschreiben
- * erweitern diese Klasse.
+ * Die Exception kann eine Liste der Objekte, die von der Exception betroffen
+ * sind enthalten.
  * 
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$
  */
 public class DynObjektException extends Exception {
 
-	/** Standard-Konstruktor. */
-	public DynObjektException() {
-		super();
-	}
+	/** Versions-ID für die Serialisierung der Klasse. */
+	private static final long serialVersionUID = 1L;
+
+	/** die Liste der Objekte, die von der Exception betroffen sind. */
+	final Collection<SystemObject> elementListe = new ArrayList<SystemObject>();
 
 	/**
 	 * Konstruktor mit Angabe eines beschreibenden Textes.
@@ -52,5 +58,46 @@ public class DynObjektException extends Exception {
 	 */
 	public DynObjektException(final String meldung) {
 		super(meldung);
+	}
+
+	/**
+	 * Konstruktor, der den Meldungstext und eine Collection der betroffenen
+	 * Elemente übernimmt.
+	 * 
+	 * @param meldung
+	 *            die Meldung
+	 * @param elemente
+	 *            die Elemente
+	 */
+	public DynObjektException(final String meldung,
+			final Collection<SystemObject> elemente) {
+		super(meldung);
+		elemente.addAll(elemente);
+	}
+
+	/**
+	 * Konstruktor, der den Meldungstext und ein Array der betroffenen Elemente
+	 * übernimmt.
+	 * 
+	 * @param meldung
+	 *            die Meldung
+	 * @param elemente
+	 *            die Elemente
+	 */
+	public DynObjektException(final String meldung,
+			final SystemObject... elemente) {
+		super(meldung);
+		for (final SystemObject element : elemente) {
+			elementListe.add(element);
+		}
+	}
+
+	/**
+	 * liefert eine Liste der von der Exception betroffenen Elemente.
+	 * 
+	 * @return die Liste
+	 */
+	public Collection<SystemObject> getElementListe() {
+		return elementListe;
 	}
 }

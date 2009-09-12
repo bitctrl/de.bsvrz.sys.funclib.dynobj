@@ -47,6 +47,15 @@ import de.bsvrz.dav.daf.main.config.DynamicObjectType;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
+ * Die Klasse verwaltet die Zuordnungen von Typen dynamischer Objekte zu den
+ * Konfigurationsbereichen, in den sie angelegt werden sollen.
+ * 
+ * Es wird der Parameterdatensatz "atg.verwaltungDynamischerObjekte" an der
+ * aktuellen AOE ausgelesen und beobachtet. Wenn der Parameterdatensatz keine
+ * Zuordnung für einen gewüschten Objekttyp enthält, wird der in den
+ * konfigurierenden Eigenschaften der AOE definierte
+ * Standardkonfigurationsbereich als Ziel für dynamsiche Objekte geliefert.
+ * 
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$
  */
@@ -58,37 +67,67 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 	 */
 	private final DataDescription desc;
 
+	/** der Standard-Konfigurationsbereich der AOE. */
 	private final ConfigurationArea defaultBereich;
 
+	/**
+	 * die Zuordnungstabelle von dynamischen Objekttypen zu
+	 * Konfigurationsbereichen.
+	 */
 	Map<DynamicObjectType, ConfigurationArea> zuordnungsTabelle = new HashMap<DynamicObjectType, ConfigurationArea>();
 
-	private final ClientDavInterface verbindung;
-
+	/**
+	 * Konstruktor. Es wird eine Instanz der Zuordnungsverwaltung für die
+	 * übergebene Datenverteilerverbindung erzeugt.
+	 * 
+	 * @param verbindung
+	 *            die Datenverteilerverbindung
+	 */
 	public ZuordnungsVerwaltung(final ClientDavInterface verbindung) {
 
-		this.verbindung = verbindung;
-		DataModel model = verbindung.getDataModel();
+		assert (verbindung != null);
 
-		ConfigurationAuthority aoe = verbindung
+		final DataModel model = verbindung.getDataModel();
+
+		final ConfigurationAuthority aoe = verbindung
 				.getLocalConfigurationAuthority();
 
-		defaultBereich = aoe.getConfigurationArea();
+		final Data configData = aoe
+				.getConfigurationData(model
+						.getAttributeGroup("atg.konfigurationsVerantwortlicherEigenschaften"));
+		final Array array = configData.getArray("defaultBereich");
+		if (array.getLength() > 0) {
+			defaultBereich = (ConfigurationArea) model.getObject(array
+					.getTextValue(0).getText());
+		} else {
+			throw new IllegalStateException(
+					"Der Defaultbereich des aktuellen Konfigurationsverantwortlichen konnte nicht ermittelt werden");
+		}
 
-		AttributeGroup atg = model
+		final AttributeGroup atg = model
 				.getAttributeGroup("atg.verwaltungDynamischerObjekte");
-		Aspect aspect = model.getAspect("asp.parameterSoll");
+		final Aspect aspect = model.getAspect("asp.parameterSoll");
 
 		if ((atg == null) || (aspect == null)) {
 			desc = null;
 		} else {
 			desc = new DataDescription(atg, aspect);
-			ResultData daten = verbindung.getData(aoe, desc, 0L);
+			final ResultData daten = verbindung.getData(aoe, desc, 0L);
 			update(new ResultData[] { daten });
 			verbindung.subscribeReceiver(this, aoe, desc, ReceiveOptions
 					.normal(), ReceiverRole.receiver());
 		}
 	}
 
+	/**
+	 * die Funktion liefert den Konfigurationsbereichm der dem übergebenen
+	 * Objekttyp zugeordnet ist. Wurde keiner gefunden, wird der
+	 * Standardkonfigurationsbereich der AOE geliefert.
+	 * 
+	 * @param typ
+	 *            der Typ für ein dynamisches Objekt
+	 * @return der ermittelte Konfigurationsbereich
+	 */
 	ConfigurationArea getKonfigurationsBereich(final DynamicObjectType typ) {
 		synchronized (zuordnungsTabelle) {
 			ConfigurationArea result = zuordnungsTabelle.get(typ);
@@ -100,23 +139,24 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void update(final ResultData[] results) {
 		synchronized (zuordnungsTabelle) {
 			zuordnungsTabelle.clear();
-			for (ResultData result : results) {
-				DataState state = result.getDataState();
+			for (final ResultData result : results) {
+				final DataState state = result.getDataState();
 				if (state == DataState.DATA) {
-					Data daten = result.getData();
+					final Data daten = result.getData();
 					if (daten != null) {
-						Array array = daten
+						final Array array = daten
 								.getArray("ZuordnungDynamischerObjektTypZuKB");
 						for (int idx = 0; idx < array.getLength(); idx++) {
-							DynamicObjectType typ = (DynamicObjectType) array
+							final DynamicObjectType typ = (DynamicObjectType) array
 									.getItem(idx).getReferenceValue(
 											"DynamischerTypReferenz")
 									.getSystemObject();
-							ConfigurationArea kb = (ConfigurationArea) array
+							final ConfigurationArea kb = (ConfigurationArea) array
 									.getItem(idx).getReferenceValue(
 											"KonfigurationsBereichReferenz")
 									.getSystemObject();
