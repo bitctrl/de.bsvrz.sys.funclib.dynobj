@@ -67,6 +67,9 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 	 */
 	private final DataDescription desc;
 
+	/** der Typ des Typs "Dynamisches Objekt" als Rückfallebene. */
+	private final DynamicObjectType typDynamischesObjekt;
+
 	/** der Standard-Konfigurationsbereich der AOE. */
 	private final ConfigurationArea defaultBereich;
 
@@ -104,11 +107,18 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 					"Der Defaultbereich des aktuellen Konfigurationsverantwortlichen konnte nicht ermittelt werden");
 		}
 
+		typDynamischesObjekt = (DynamicObjectType) model
+				.getObject("typ.dynamischesObjekt");
+
 		final AttributeGroup atg = model
 				.getAttributeGroup("atg.verwaltungDynamischerObjekte");
 		final Aspect aspect = model.getAspect("asp.parameterSoll");
 
 		if ((atg == null) || (aspect == null)) {
+			Debug
+					.getLogger()
+					.error(
+							"Der Parameterdatensatz für die Verwaltung dynamischer Objekte ist nicht verfügbar!");
 			desc = null;
 		} else {
 			desc = new DataDescription(atg, aspect);
@@ -121,8 +131,11 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 
 	/**
 	 * die Funktion liefert den Konfigurationsbereichm der dem übergebenen
-	 * Objekttyp zugeordnet ist. Wurde keiner gefunden, wird der
-	 * Standardkonfigurationsbereich der AOE geliefert.
+	 * Objekttyp zugeordnet ist. Wurde keiner gefunden, wird der Wert null
+	 * geliefert. Eine Ausnahme besteht für den Fall, dass der
+	 * Parameterdatensatz in älteren Systemen an der AOE nicht konfiguriert ist.
+	 * In diesem Fall wird der erste konfigurierte Standardkonfigurationsbereich
+	 * der AOE geliefert.
 	 * 
 	 * @param typ
 	 *            der Typ für ein dynamisches Objekt
@@ -132,7 +145,11 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 		synchronized (zuordnungsTabelle) {
 			ConfigurationArea result = zuordnungsTabelle.get(typ);
 			if (result == null) {
-				result = defaultBereich;
+				if (desc == null) {
+					result = defaultBereich;
+				} else {
+					result = zuordnungsTabelle.get(typDynamischesObjekt);
+				}
 			}
 
 			return result;

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Bibliothek für dynamische Objekte
 Bundle-SymbolicName: de.bsvrz.sys.funclib.dynobj
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
 Export-Package: de.bsvrz.sys.funclib.dynobj
 Require-Bundle: de.bsvrz.kernsoftware.bibliothek;bundle-version="4.3.1"
 Bundle-Vendor: BitCtrl Systems GmbH

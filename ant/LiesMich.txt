@@ -13,6 +13,19 @@ und Unterstützung bietet.
 Desweiteren stellt sie eine Reihe von Funktionen zur Verfügung, die die Arbeit
 mit dynamischen Objekten und Mengen vereinfacht.
 
+Version 1.0.1
+=============
+
+Anpassung des Fehlerverhaltens bezüglich des Parameterdatensatzes zur Verwaltung 
+der Zuordnung "Dynamisches Objekt <--> Konfigurationsbereich"
+
+- bei nicht konfiguriertem Parameterdatensatz wird der erste konfigurierte 
+  Standardkonfigurationsbereich der AOE geliefert
+- ist der Parameterdatensatz konfiguriert, muss auch ein entsprechender 
+  Zuordnungsparameter parametriert sein. Als Rückfallebene kann bei der 
+  Zuordnung der Typ "typ.dynamischesObjekt" verwendet werden. 
+
+
 Disclaimer
 ==========
 
