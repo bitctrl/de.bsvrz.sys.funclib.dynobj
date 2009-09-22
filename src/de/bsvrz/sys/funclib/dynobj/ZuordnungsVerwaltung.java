@@ -88,7 +88,7 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 	 */
 	public ZuordnungsVerwaltung(final ClientDavInterface verbindung) {
 
-		assert (verbindung != null);
+		assert verbindung != null;
 
 		final DataModel model = verbindung.getDataModel();
 
@@ -114,7 +114,7 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 				.getAttributeGroup("atg.verwaltungDynamischerObjekte");
 		final Aspect aspect = model.getAspect("asp.parameterSoll");
 
-		if ((atg == null) || (aspect == null)) {
+		if (atg == null || aspect == null) {
 			Debug
 					.getLogger()
 					.error(
@@ -157,7 +157,6 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 	}
 
 	/** {@inheritDoc} */
-	@Override
 	public void update(final ResultData[] results) {
 		synchronized (zuordnungsTabelle) {
 			zuordnungsTabelle.clear();

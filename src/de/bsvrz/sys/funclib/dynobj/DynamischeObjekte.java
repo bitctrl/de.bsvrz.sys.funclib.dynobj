@@ -96,7 +96,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * @return eine Instanz zur Verwaltung dynamischer Objekte
 	 */
 	public static DynamischeObjekte getInstanz(final ClientDavInterface dav) {
-		assert (dav != null);
+		assert dav != null;
 
 		DynamischeObjekte result = DynamischeObjekte.instanzen.get(dav);
 		if (result == null) {
@@ -121,7 +121,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 *            die verwendete Datenverteilerverbindung
 	 */
 	private DynamischeObjekte(final ClientDavInterface verbindung) {
-		assert (verbindung != null);
+		assert verbindung != null;
 		this.verbindung = verbindung;
 		verbindung.addConnectionListener(this);
 
@@ -140,7 +140,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	public void bereinigeMenge(final MutableSet menge)
 			throws DynObjektException {
 
-		assert (menge != null);
+		assert menge != null;
 
 		final Collection<SystemObject> elemente = new ArrayList<SystemObject>();
 
@@ -171,7 +171,6 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * der internen Verwaltung entfernt, damit die Ressourcen vom GC freigegeben
 	 * werden können.
 	 */
-	@Override
 	public void connectionClosed(final ClientDavInterface connection) {
 		DynamischeObjekte.instanzen.remove(verbindung);
 	}
@@ -195,7 +194,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	public void entferneAlleObjekteAusMenge(final MutableSet menge,
 			final boolean loescheObjekte) throws DynObjektException {
 
-		assert (menge != null);
+		assert menge != null;
 
 		final Collection<SystemObject> elemente = new ArrayList<SystemObject>();
 		elemente.addAll(menge.getElements());
@@ -268,8 +267,8 @@ public final class DynamischeObjekte implements DavConnectionListener {
 			final MutableSet menge, final boolean loescheObjekt)
 			throws DynObjektException {
 
-		assert (menge != null);
-		assert (objekt != null);
+		assert menge != null;
+		assert objekt != null;
 
 		boolean result = false;
 
@@ -427,7 +426,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 			final Collection<DataAndATGUsageInformation> konfigurationsDaten,
 			final MutableSet menge) throws DynObjektException {
 
-		assert (menge != null);
+		assert menge != null;
 
 		final DynamicObject objekt = erzeugeObjekt(typ, name, pid,
 				konfigurationsDaten);
@@ -490,8 +489,8 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 */
 	public boolean fuegeObjektInMengeEin(final DynamicObject objekt,
 			final MutableSet menge) throws DynObjektException {
-		assert (objekt != null);
-		assert (menge != null);
+		assert objekt != null;
+		assert menge != null;
 
 		boolean result = false;
 
@@ -539,7 +538,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 			final DynamicObjectType typ, final MutableSet... mengen)
 			throws DynObjektException {
 
-		assert (typ != null);
+		assert typ != null;
 
 		final Set<SystemObject> mengenObjekte = new HashSet<SystemObject>();
 
@@ -600,7 +599,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	public void loescheObjekt(final DynamicObject objekt)
 			throws DynObjektException {
 
-		assert (objekt != null);
+		assert objekt != null;
 
 		try {
 			objekt.invalidate();
