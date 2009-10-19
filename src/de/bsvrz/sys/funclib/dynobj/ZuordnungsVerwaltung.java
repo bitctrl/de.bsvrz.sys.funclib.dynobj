@@ -77,7 +77,7 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 	 * die Zuordnungstabelle von dynamischen Objekttypen zu
 	 * Konfigurationsbereichen.
 	 */
-	Map<DynamicObjectType, ConfigurationArea> zuordnungsTabelle = new HashMap<DynamicObjectType, ConfigurationArea>();
+	private final Map<DynamicObjectType, ConfigurationArea> zuordnungsTabelle = new HashMap<DynamicObjectType, ConfigurationArea>();
 
 	/**
 	 * Konstruktor. Es wird eine Instanz der Zuordnungsverwaltung für die
@@ -141,7 +141,8 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 	 *            der Typ für ein dynamisches Objekt
 	 * @return der ermittelte Konfigurationsbereich
 	 */
-	ConfigurationArea getKonfigurationsBereich(final DynamicObjectType typ) {
+	public ConfigurationArea getKonfigurationsBereich(
+			final DynamicObjectType typ) {
 		synchronized (zuordnungsTabelle) {
 			ConfigurationArea result = zuordnungsTabelle.get(typ);
 			if (result == null) {
