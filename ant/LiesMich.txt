@@ -13,6 +13,10 @@ und Unterstützung bietet.
 Desweiteren stellt sie eine Reihe von Funktionen zur Verfügung, die die Arbeit
 mit dynamischen Objekten und Mengen vereinfacht.
 
+Version 1.0.2
+=============
+Funktion "bereinigeMenge" verwendet die Elemente aus der Menge.
+
 Version 1.0.1
 =============
 

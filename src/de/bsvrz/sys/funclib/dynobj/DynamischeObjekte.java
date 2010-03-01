@@ -144,7 +144,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 
 		final Collection<SystemObject> elemente = new ArrayList<SystemObject>();
 
-		for (final SystemObject element : elemente) {
+		for (final SystemObject element : menge.getElements()) {
 			if (!element.isValid()) {
 				elemente.add(element);
 			}
