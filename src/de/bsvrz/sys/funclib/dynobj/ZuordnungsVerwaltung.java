@@ -44,6 +44,7 @@ import de.bsvrz.dav.daf.main.config.ConfigurationArea;
 import de.bsvrz.dav.daf.main.config.ConfigurationAuthority;
 import de.bsvrz.dav.daf.main.config.DataModel;
 import de.bsvrz.dav.daf.main.config.DynamicObjectType;
+import de.bsvrz.dav.daf.main.config.SystemObject;
 import de.bsvrz.sys.funclib.debug.Debug;
 
 /**
@@ -169,10 +170,30 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 						final Array array = daten
 								.getArray("ZuordnungDynamischerObjektTypZuKB");
 						for (int idx = 0; idx < array.getLength(); idx++) {
+							SystemObject systemObject = array
+							.getItem(idx).getReferenceValue(
+									"DynamischerTypReferenz")
+							.getSystemObject();
+
+							if (! (systemObject instanceof DynamicObjectType)) {
+								throw new IllegalStateException(
+									this.getClass().getName() +  
+									": Der Parameterdatensatz " + idx + " für die Verwaltung dynamischer Objekte ist ungültig!");
+							}
+							
 							final DynamicObjectType typ = (DynamicObjectType) array
 									.getItem(idx).getReferenceValue(
 											"DynamischerTypReferenz")
 									.getSystemObject();
+							
+							systemObject = array.getItem(idx).getReferenceValue("KonfigurationsBereichReferenz").getSystemObject();
+							
+							if (! (systemObject instanceof ConfigurationArea)) {
+								throw new IllegalStateException(
+									this.getClass().getName() +  
+									": Der Parameterdatensatz " + idx + " für die Verwaltung dynamischer Objekte ist ungültig!");
+							}
+
 							final ConfigurationArea kb = (ConfigurationArea) array
 									.getItem(idx).getReferenceValue(
 											"KonfigurationsBereichReferenz")
