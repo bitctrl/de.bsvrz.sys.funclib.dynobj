@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Funktionsbibliothek dynamische Objekte
 Bundle-SymbolicName: de.bsvrz.sys.funclib.dynobj
-Bundle-Version: 1.0.2.qualifier
+Bundle-Version: 1.0.3.qualifier
 Export-Package: de.bsvrz.sys.funclib.dynobj
 Bundle-Vendor: BitCtrl Systems GmbH
 Import-Package: de.bsvrz.dav.daf.main,
