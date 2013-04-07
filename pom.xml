@@ -4,10 +4,10 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.bitctrl</groupId>
-		<artifactId>com.bitctrl.tycho.master</artifactId>
+		<groupId>com.bitctrl.dav</groupId>
+		<artifactId>com.bitctrl.dav.tycho.master</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../com.bitctrl.tycho.master/pom.xml</relativePath>
+		<relativePath>../com.bitctrl.dav.tycho.master/pom.xml</relativePath>
 	</parent>
 	<groupId>com.bitctrl.dav</groupId>
 	<artifactId>de.bsvrz.sys.funclib.dynobj</artifactId>
