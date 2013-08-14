@@ -9,3 +9,4 @@ Import-Package: de.bsvrz.dav.daf.main,
  de.bsvrz.dav.daf.main.config,
  de.bsvrz.sys.funclib.debug
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .
