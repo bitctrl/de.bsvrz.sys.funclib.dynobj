@@ -1,7 +1,7 @@
 /*
  * Funktionsbibliothek zum Arbeit mit dynamischen Objekten im Datenverteiler
- * Copyright (C) 2009 BitCtrl Systems GmbH 
- * 
+ * Copyright (C) 2009 BitCtrl Systems GmbH
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
@@ -26,7 +26,7 @@
 
 /**
  * Klassen für die Verwaltung dynamischer Objekte in einem Datenverteilersystem.
- * 
+ *
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$
  * @since 1.0

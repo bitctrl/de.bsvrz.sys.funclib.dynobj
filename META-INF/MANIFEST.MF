@@ -8,5 +8,5 @@ Bundle-Vendor: BitCtrl Systems GmbH
 Import-Package: de.bsvrz.dav.daf.main,
  de.bsvrz.dav.daf.main.config,
  de.bsvrz.sys.funclib.debug
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .

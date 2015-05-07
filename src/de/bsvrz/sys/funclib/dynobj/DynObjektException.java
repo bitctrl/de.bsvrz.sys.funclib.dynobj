@@ -1,7 +1,7 @@
 /*
  * Funktionsbibliothek zum Arbeit mit dynamischen Objekten im Datenverteiler
- * Copyright (C) 2009 BitCtrl Systems GmbH 
- * 
+ * Copyright (C) 2009 BitCtrl Systems GmbH
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
@@ -35,10 +35,10 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
  * Eine Exception, die auftreten kann, wenn dynamische Objekte mit Hilfe eines
  * Verwaltungsobjekts von Typ {@link DynamischeObjekte} angelegt und/oder
  * entfernt bzw. in Mengen eingetragen/entfernt werden sollen.
- * 
+ *
  * Die Exception kann eine Liste der Objekte, die von der Exception betroffen
  * sind enthalten.
- * 
+ *
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$
  */
@@ -48,11 +48,11 @@ public class DynObjektException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	/** die Liste der Objekte, die von der Exception betroffen sind. */
-	final Collection<SystemObject> elementListe = new ArrayList<SystemObject>();
+	private final Collection<SystemObject> elementListe = new ArrayList<>();
 
 	/**
 	 * Konstruktor mit Angabe eines beschreibenden Textes.
-	 * 
+	 *
 	 * @param meldung
 	 *            der beschreibende Text
 	 */
@@ -63,7 +63,7 @@ public class DynObjektException extends Exception {
 	/**
 	 * Konstruktor, der den Meldungstext und eine Collection der betroffenen
 	 * Elemente übernimmt.
-	 * 
+	 *
 	 * @param meldung
 	 *            die Meldung
 	 * @param elemente
@@ -78,7 +78,7 @@ public class DynObjektException extends Exception {
 	/**
 	 * Konstruktor, der den Meldungstext und ein Array der betroffenen Elemente
 	 * übernimmt.
-	 * 
+	 *
 	 * @param meldung
 	 *            die Meldung
 	 * @param elemente
@@ -94,7 +94,7 @@ public class DynObjektException extends Exception {
 
 	/**
 	 * liefert eine Liste der von der Exception betroffenen Elemente.
-	 * 
+	 *
 	 * @return die Liste
 	 */
 	public Collection<SystemObject> getElementListe() {

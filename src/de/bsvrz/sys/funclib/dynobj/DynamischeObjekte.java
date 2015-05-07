@@ -1,7 +1,7 @@
 /*
  * Funktionsbibliothek zum Arbeit mit dynamischen Objekten im Datenverteiler
- * Copyright (C) 2009 BitCtrl Systems GmbH 
- * 
+ * Copyright (C) 2009 BitCtrl Systems GmbH
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
@@ -49,7 +49,7 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * Objekten innerhalb eines Datenverteilersystems vereinheitlicht wird.
  * Insbesondere wird hiermit die Verteilung von dynamischen Objekten auf
  * verschiedene Konfigurationsbereiche organisiert.
- * 
+ *
  * Die benutzerabhängige Zuordnung der dynamischen Objekte zu
  * Konfigurationsbereichen über ein Verwaltungsobjekt dieser Klasse, erfolgt
  * über einen Parameterdatensatz, der Bestandteil der AOE des Systems ist. Die
@@ -57,42 +57,42 @@ import de.bsvrz.sys.funclib.debug.Debug;
  * von Attributlisten, die jeweils aus den Attributen "Objekttyp" (einer
  * Referenz auf den Typ eines dynamsichen Objekts) und "Konfigurationsbereich"
  * (einer Referenz auf einen Kobfigurationsbereich bestehen.
- * 
+ *
  * Beim Anlegen eines dynamischen Objekts über die hier bereitgestellten
  * Funktionen wird dieser Parametersatz ausgewertet und ermittelt, in welchem
  * Konfigurationsbereich das jeweils zu erzeugende Objekt abgelegt werden soll.
- * 
+ *
  * Wird innerhalb des Parameters keine entsprechende Zuordnung gefunden, wird
  * das Objekt entweder innerhalb des Default-Bereiches der AOE abgelegt oder das
  * Anlegen des Objekts schlägt fehl. Das Verhalten kann für das
  * Verwaltungsobjekt per Funktionsaufruf definiert werden.
- * 
+ *
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$
  */
 public final class DynamischeObjekte implements DavConnectionListener {
 
 	/** die Menge der angelegten Instanzen von Verwaltungsobjekten. */
-	private static Map<ClientDavInterface, DynamischeObjekte> instanzen = new HashMap<ClientDavInterface, DynamischeObjekte>();
+	private static Map<ClientDavInterface, DynamischeObjekte> instanzen = new HashMap<>();
 
 	/**
 	 * Funktion zum Erzeugen eines Verwaltungsobjekts für dynamische Objekte.
 	 * Die Instanzen der Objekte sind Singletons pro Datenverteilerverbindung
 	 * und werden intern innerhalb der Klasse verwaltet.
-	 * 
+	 *
 	 * Eine Instanz eines Verwaltungsobjektes wird aus der internen Verwaltung
 	 * freigegeben, wenn die übergebene Datenverteilerverbindung geschlossen
 	 * wird. Die Datenverteilerverbindung, mit dem eine solche Instanz abgerufen
 	 * wird sollte daher immer eine aktive Verbindung haben, ansonsten besteht
 	 * hier die Gefahr eines Memory-Leaks.
-	 * 
+	 *
 	 * Die Datenverteilerverbindung muss unbedingt übergeben werden, der Wert
 	 * <code>null</code> ist nicht zulässig.
-	 * 
+	 *
 	 * @param dav
 	 *            die Datenverteilerverbindung über die dynamische Objekte
 	 *            verwaltet werden sollen
-	 * 
+	 *
 	 * @return eine Instanz zur Verwaltung dynamischer Objekte
 	 */
 	public static DynamischeObjekte getInstanz(final ClientDavInterface dav) {
@@ -116,7 +116,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * Privater Konstruktor für eine Verwaltungsobjekt. Der Zugriff auf die
 	 * Objekte erfolgt durch die Factory-Methode
 	 * {@link #getInstanz(ClientDavInterface)}.
-	 * 
+	 *
 	 * @param verbindung
 	 *            die verwendete Datenverteilerverbindung
 	 */
@@ -131,7 +131,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	/**
 	 * die Funktion entfernt alle Elemente aus der übergebenen Menge, die nicht
 	 * mehr gültig sind.
-	 * 
+	 *
 	 * @param menge
 	 *            die Menge, die geleert werden soll
 	 * @throws DynObjektException
@@ -142,7 +142,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 
 		assert menge != null;
 
-		final Collection<SystemObject> elemente = new ArrayList<SystemObject>();
+		final Collection<SystemObject> elemente = new ArrayList<>();
 
 		for (final SystemObject element : menge.getElements()) {
 			if (!element.isValid()) {
@@ -164,13 +164,14 @@ public final class DynamischeObjekte implements DavConnectionListener {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * Implemetiert das Interface {@link DavConnectionListener}.
-	 * 
+	 *
 	 * Das der Datenverteilerverbindung zugeordnete Verwaltungsobjekt wird aus
 	 * der internen Verwaltung entfernt, damit die Ressourcen vom GC freigegeben
 	 * werden können.
 	 */
+	@Override
 	public void connectionClosed(final ClientDavInterface connection) {
 		DynamischeObjekte.instanzen.remove(verbindung);
 	}
@@ -178,10 +179,10 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	/**
 	 * die Funktion entfernt alle Elemente aus der übergebenen Menge. Optional
 	 * können die aus der Menge entfernten Objekte auch selbst entfernt werden.
-	 * 
+	 *
 	 * Wenn das Entfernen der Elemente aus der Menge bereits fehlschlägt, werden
 	 * die Objekte auch nicht gelöscht.
-	 * 
+	 *
 	 * @param menge
 	 *            die Menge, die geleert werden soll
 	 * @param loescheObjekte
@@ -196,7 +197,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 
 		assert menge != null;
 
-		final Collection<SystemObject> elemente = new ArrayList<SystemObject>();
+		final Collection<SystemObject> elemente = new ArrayList<>();
 		elemente.addAll(menge.getElements());
 		if (elemente.size() > 0) {
 			try {
@@ -210,7 +211,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 			}
 
 			if (loescheObjekte) {
-				for (final SystemObject element : new ArrayList<SystemObject>(
+				for (final SystemObject element : new ArrayList<>(
 						elemente)) {
 					try {
 						element.invalidate();
@@ -233,11 +234,11 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * die Funktion entfernt das übergebene Objekt aus der übergebenen Menge.
 	 * Optional kann über den Parameter <i>loescheObjekt</i> definiert werden,
 	 * ob das Objekt selbst auch entfernt wird.
-	 * 
+	 *
 	 * Als Ergebnis wird der Wert <code>true</code> geliefert, wenn das Element
 	 * aus der Menge entfernt werden konnte, <code>false</code>, wenn es nicht
 	 * in der Menge enthalten war.
-	 * 
+	 *
 	 * Die Funktion bildet keine Transaktion, d.h. wenn beispielsweise das
 	 * Entfernen des Objekts aus der Menge erfolgreich war, aber das Objekt
 	 * selbst nicth gelöscht werden konnte, wird eine
@@ -245,27 +246,27 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * trotzdem nicht mehr Bestandteil der Menge. Wenn das Entfernen des Objekts
 	 * aus der Menge fehlschlägt (außer es ist nicht Bestandteil der Menge),
 	 * wird das Objekt auch nicht entfernt.
-	 * 
+	 *
 	 * Die Funktion ist nicht synchronisiert mit den Benachrichtigungen über
 	 * Mengenänderungen, d.h. es werden lediglich die direkten Rückmeldungen aus
 	 * den Aufrufen der Datenverteilerapplikationsfunktionen ausgewertet!
-	 * 
+	 *
 	 * @param objekt
 	 *            das Objekt, das aus der Menge entfernt werden soll
 	 * @param menge
 	 *            die Menge aus der ein Objekt entfernt werden soll
 	 * @param loescheObjekt
 	 *            definiert, ob das Objekt selbst ebenfalls gelöscht werden soll
-	 * 
+	 *
 	 * @return <code>true</code>, wenn das Objekt entfernt wurde
-	 * 
+	 *
 	 * @throws DynObjektException
 	 *             das Objekt konnte nicht aus der Menge entfernt werden oder
 	 *             das Objekt konnte nicht gelöscht werden
 	 */
 	public boolean entferneObjektAusMenge(final DynamicObject objekt,
 			final MutableSet menge, final boolean loescheObjekt)
-			throws DynObjektException {
+					throws DynObjektException {
 
 		assert menge != null;
 		assert objekt != null;
@@ -301,7 +302,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	/**
 	 * die Funktion erzeugt ein dynamisches Objekt auf Basis der übergebenen
 	 * Daten.
-	 * 
+	 *
 	 * @param typ
 	 *            der Typ des zu erzeugenden Objekts
 	 * @param name
@@ -311,7 +312,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * @return das erzeugte Objekt
 	 * @throws DynObjektException
 	 *             das Objekt konnte nicht in der Konfiguration angelegt werden
-	 * 
+	 *
 	 * @see #erzeugeObjekt(DynamicObjectType, String, String, Collection)
 	 * @see #erzeugeObjektInMenge(DynamicObjectType, String, String, MutableSet)
 	 * @see #erzeugeObjektInMenge(DynamicObjectType, String, String, Collection,
@@ -326,7 +327,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * die Funktion erzeugt ein dynamisches Objekt auf Basis der übergebenen
 	 * Daten. Zusätzlich zu den eigentlichen Objektinformationen können
 	 * konfigurierende Datensätze für das Objekt übergeben werden.
-	 * 
+	 *
 	 * @param typ
 	 *            der Typ des zu erzeugenden Objekts
 	 * @param name
@@ -335,12 +336,12 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 *            die gewünschte PID
 	 * @param konfigurationsDaten
 	 *            die konfigurierenden Datensätze des Objekts
-	 * 
+	 *
 	 * @return das erzeugte Objekt
-	 * 
+	 *
 	 * @throws DynObjektException
 	 *             das Objekt konnte nicht in der Konfiguration angelegt werden
-	 * 
+	 *
 	 * @see #erzeugeObjekt(DynamicObjectType, String, String)
 	 * @see #erzeugeObjektInMenge(DynamicObjectType, String, String, MutableSet)
 	 * @see #erzeugeObjektInMenge(DynamicObjectType, String, String, Collection,
@@ -349,12 +350,12 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	public DynamicObject erzeugeObjekt(final DynamicObjectType typ,
 			final String name, final String pid,
 			final Collection<DataAndATGUsageInformation> konfigurationsDaten)
-			throws DynObjektException {
+					throws DynObjektException {
 		if (zuordnung == null) {
 			Debug
-					.getLogger()
-					.error(
-							"Die Zuordnungstabelle zum Anlegen dynamischer Objekte ist nicht verfügbar!");
+			.getLogger()
+			.error(
+					"Die Zuordnungstabelle zum Anlegen dynamischer Objekte ist nicht verfügbar!");
 			throw new DynObjektException(
 					"Die Zuordnungstabelle zum Anlegen dynamischer Objekte ist nicht verfügbar!");
 		}
@@ -393,12 +394,12 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * Daten und trägt dieses in die übergebene Menge ein. Zusätzlich zu den
 	 * eigentlichen Objektinformationen können optional konfiguriernde
 	 * datensätze beim Anlegen des Objekts übergeben werden.
-	 * 
+	 *
 	 * Es handelt sich nicht um eine Transaktion, d.h. wenn das Objekt angelegt
 	 * und nicht in die Menge eingetragen werden konnte, bleibt das Objekt
 	 * trotzdem bestehen und muss gegebenenfalls in der entsprechenden
 	 * Fehlerbehandlungsroutine händisch entfernt werden.
-	 * 
+	 *
 	 * @param typ
 	 *            der Typ des zu erzeugenden Objekts
 	 * @param name
@@ -409,13 +410,13 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 *            die konfigurierenden Datensätze des neu anzulegenden Objekts
 	 * @param menge
 	 *            die Menge in die das Objekt eingetragen werden soll
-	 * 
+	 *
 	 * @return das erzeugte Objekt
-	 * 
+	 *
 	 * @throws DynObjektException
 	 *             das Objekt konnte nicht in der Konfiguration angelegt bzw. in
 	 *             die Menge eingetragen werden.
-	 * 
+	 *
 	 * @see #erzeugeObjekt(DynamicObjectType, String, String)
 	 * @see #erzeugeObjekt(DynamicObjectType, String, String, Collection)
 	 * @see #erzeugeObjektInMenge(DynamicObjectType, String, String, MutableSet)
@@ -442,12 +443,12 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	/**
 	 * die Funktion erzeugt ein dynamisches Objekt auf Basis der übergebenen
 	 * Daten und trägt dieses in die übergebene Menge ein.
-	 * 
+	 *
 	 * Es handelt sich nicht um eine Transaktion, d.h. wenn das Objekt angelegt
 	 * und nicht in die Menge eingetragen werden konnte, bleibt das Objekt
 	 * trotzdem bestehen und muss gegebenenfalls in der entsprechenden
 	 * Fehlerbehandlungsroutine händisch entfernt werden.
-	 * 
+	 *
 	 * @param typ
 	 *            der Typ des zu erzeugenden Objekts
 	 * @param name
@@ -456,13 +457,13 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 *            die gewünschte PID
 	 * @param menge
 	 *            die Menge in die das Objekt eingetragen werden soll
-	 * 
+	 *
 	 * @return das erzeugte Objekt
-	 * 
+	 *
 	 * @throws DynObjektException
 	 *             das Objekt konnte nicht in der Konfiguration angelegt bzw. in
 	 *             die Menge eingetragen werden.
-	 * 
+	 *
 	 * @see #erzeugeObjekt(DynamicObjectType, String, String)
 	 * @see #erzeugeObjekt(DynamicObjectType, String, String, Collection)
 	 *      MutableSet)
@@ -470,13 +471,13 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 */
 	public DynamicObject erzeugeObjektInMenge(final DynamicObjectType typ,
 			final String name, final String pid, final MutableSet menge)
-			throws DynObjektException {
+					throws DynObjektException {
 		return erzeugeObjektInMenge(typ, name, pid, null, menge);
 	}
 
 	/**
 	 * die Funktion fügt das übergebene Objekt in die angegebene Menge ein.
-	 * 
+	 *
 	 * @param objekt
 	 *            das Objekt
 	 * @param menge
@@ -511,7 +512,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * die Funktion liefert den Konfigurationsbereich, der dem übergebenen
 	 * Objekttyp zugeordnet ist. Wurde keiner gefunden, wird der
 	 * Standardkonfigurationsbereich der AOE geliefert.
-	 * 
+	 *
 	 * @param typ
 	 *            der Typ für ein dynamisches Objekt
 	 * @return der ermittelte Konfigurationsbereich
@@ -524,7 +525,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	/**
 	 * die Funktion löscht alle Objekte mit dem übergebenen Typ, die sich nicht
 	 * in einer der übergebenen Mengen befinden.
-	 * 
+	 *
 	 * @param typ
 	 *            der Typ dessen Instanzen entfernt werden sollen
 	 * @param mengen
@@ -536,11 +537,11 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 */
 	public void loescheAlleNichtZugeordnetenObjekte(
 			final DynamicObjectType typ, final MutableSet... mengen)
-			throws DynObjektException {
+					throws DynObjektException {
 
 		assert typ != null;
 
-		final Set<SystemObject> mengenObjekte = new HashSet<SystemObject>();
+		final Set<SystemObject> mengenObjekte = new HashSet<>();
 
 		if (mengen != null) {
 			for (final MutableSet menge : mengen) {
@@ -548,8 +549,8 @@ public final class DynamischeObjekte implements DavConnectionListener {
 			}
 		}
 
-		final Collection<SystemObject> liste = new ArrayList<SystemObject>();
-		final Collection<SystemObject> fehlerListe = new ArrayList<SystemObject>();
+		final Collection<SystemObject> liste = new ArrayList<>();
+		final Collection<SystemObject> fehlerListe = new ArrayList<>();
 		liste.addAll(typ.getElements());
 
 		for (final SystemObject objekt : liste) {
@@ -572,7 +573,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 
 	/**
 	 * die Funktion löscht alle Objekte mit dem übergebenen Typ.
-	 * 
+	 *
 	 * @param typ
 	 *            der Typ dessen Instanzen entfernt werden sollen
 	 * @throws DynObjektException
@@ -590,7 +591,7 @@ public final class DynamischeObjekte implements DavConnectionListener {
 	 * zwar eigentlich überflüssig, da sie am Ende lediglich
 	 * {@link SystemObject#invalidate()} aufruft, vervollständigt aber die
 	 * Funktionalität des Verwaltungsobjektes.
-	 * 
+	 *
 	 * @param objekt
 	 *            das Objekt, das gelöscht werden soll
 	 * @throws DynObjektException
