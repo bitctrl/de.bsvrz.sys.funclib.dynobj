@@ -53,9 +53,9 @@ import de.bsvrz.sys.funclib.debug.Debug;
  *
  * Es wird der Parameterdatensatz "atg.verwaltungDynamischerObjekte" an der
  * aktuellen AOE ausgelesen und beobachtet. Wenn der Parameterdatensatz keine
- * Zuordnung für einen gewüschten Objekttyp enthält, wird der in den
+ * Zuordnung fÃ¼r einen gewÃ¼schten Objekttyp enthÃ¤lt, wird der in den
  * konfigurierenden Eigenschaften der AOE definierte
- * Standardkonfigurationsbereich als Ziel für dynamsiche Objekte geliefert.
+ * Standardkonfigurationsbereich als Ziel fÃ¼r dynamsiche Objekte geliefert.
  *
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$
@@ -63,12 +63,12 @@ import de.bsvrz.sys.funclib.debug.Debug;
 class ZuordnungsVerwaltung implements ClientReceiverInterface {
 
 	/**
-	 * die Datenbeschreibung für den Zugriff auf den
+	 * die Datenbeschreibung fÃ¼r den Zugriff auf den
 	 * Zuordnungsparameterdatensatz.
 	 */
 	private final DataDescription desc;
 
-	/** der Typ des Typs "Dynamisches Objekt" als Rückfallebene. */
+	/** der Typ des Typs "Dynamisches Objekt" als RÃ¼ckfallebene. */
 	private final DynamicObjectType typDynamischesObjekt;
 
 	/** der Standard-Konfigurationsbereich der AOE. */
@@ -81,8 +81,8 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 	private final Map<DynamicObjectType, ConfigurationArea> zuordnungsTabelle = new HashMap<>();
 
 	/**
-	 * Konstruktor. Es wird eine Instanz der Zuordnungsverwaltung für die
-	 * übergebene Datenverteilerverbindung erzeugt.
+	 * Konstruktor. Es wird eine Instanz der Zuordnungsverwaltung fÃ¼r die
+	 * Ã¼bergebene Datenverteilerverbindung erzeugt.
 	 *
 	 * @param verbindung
 	 *            die Datenverteilerverbindung
@@ -117,7 +117,7 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 
 		if ((atg == null) || (aspect == null)) {
 			Debug.getLogger()
-			.error("Der Parameterdatensatz für die Verwaltung dynamischer Objekte ist nicht verfügbar!");
+			.error("Der Parameterdatensatz fÃ¼r die Verwaltung dynamischer Objekte ist nicht verfÃ¼gbar!");
 			desc = null;
 		} else {
 			desc = new DataDescription(atg, aspect);
@@ -129,15 +129,15 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 	}
 
 	/**
-	 * die Funktion liefert den Konfigurationsbereichm der dem übergebenen
+	 * die Funktion liefert den Konfigurationsbereichm der dem Ã¼bergebenen
 	 * Objekttyp zugeordnet ist. Wurde keiner gefunden, wird der Wert null
-	 * geliefert. Eine Ausnahme besteht für den Fall, dass der
-	 * Parameterdatensatz in älteren Systemen an der AOE nicht konfiguriert ist.
+	 * geliefert. Eine Ausnahme besteht fÃ¼r den Fall, dass der
+	 * Parameterdatensatz in Ã¤lteren Systemen an der AOE nicht konfiguriert ist.
 	 * In diesem Fall wird der erste konfigurierte Standardkonfigurationsbereich
 	 * der AOE geliefert.
 	 *
 	 * @param typ
-	 *            der Typ für ein dynamisches Objekt
+	 *            der Typ fÃ¼r ein dynamisches Objekt
 	 * @return der ermittelte Konfigurationsbereich
 	 */
 	public ConfigurationArea getKonfigurationsBereich(
@@ -179,7 +179,7 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 										this.getClass().getName()
 										+ ": Der Parameterdatensatz "
 										+ idx
-										+ " für die Verwaltung dynamischer Objekte ist ungültig!");
+										+ " fÃ¼r die Verwaltung dynamischer Objekte ist ungÃ¼ltig!");
 							}
 
 							final DynamicObjectType typ = (DynamicObjectType) array
@@ -198,7 +198,7 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 										this.getClass().getName()
 										+ ": Der Parameterdatensatz "
 										+ idx
-										+ " für die Verwaltung dynamischer Objekte ist ungültig!");
+										+ " fÃ¼r die Verwaltung dynamischer Objekte ist ungÃ¼ltig!");
 							}
 
 							final ConfigurationArea kb = (ConfigurationArea) array
@@ -210,7 +210,7 @@ class ZuordnungsVerwaltung implements ClientReceiverInterface {
 						}
 					} else {
 						Debug.getLogger().warning(
-								"Der Datensatz enthält keine Daten: " + result);
+								"Der Datensatz enthÃ¤lt keine Daten: " + result);
 					}
 				} else {
 					Debug.getLogger().warning(

@@ -7,13 +7,13 @@
 	<parent>
 		<groupId>com.bitctrl.dav</groupId>
 		<artifactId>com.bitctrl.dav.tycho.master</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.1.0-SNAPSHOT</version>
 		<relativePath>../com.bitctrl.dav.tycho.master/pom.xml</relativePath>
 	</parent>
 
 	<groupId>de.bsvrz.sys</groupId>
 	<artifactId>de.bsvrz.sys.funclib.dynobj</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>

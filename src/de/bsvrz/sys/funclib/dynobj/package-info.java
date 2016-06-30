@@ -25,7 +25,7 @@
  */
 
 /**
- * Klassen für die Verwaltung dynamischer Objekte in einem Datenverteilersystem.
+ * Klassen fÃ¼r die Verwaltung dynamischer Objekte in einem Datenverteilersystem.
  *
  * @author BitCtrl Systems GmbH, Uwe Peuker
  * @version $Id$

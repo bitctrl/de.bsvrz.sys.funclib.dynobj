@@ -44,7 +44,7 @@ import de.bsvrz.dav.daf.main.config.SystemObject;
  */
 public class DynObjektException extends Exception {
 
-	/** Versions-ID für die Serialisierung der Klasse. */
+	/** Versions-ID fÃ¼r die Serialisierung der Klasse. */
 	private static final long serialVersionUID = 1L;
 
 	/** die Liste der Objekte, die von der Exception betroffen sind. */
@@ -62,7 +62,7 @@ public class DynObjektException extends Exception {
 
 	/**
 	 * Konstruktor, der den Meldungstext und eine Collection der betroffenen
-	 * Elemente übernimmt.
+	 * Elemente Ã¼bernimmt.
 	 *
 	 * @param meldung
 	 *            die Meldung
@@ -77,7 +77,7 @@ public class DynObjektException extends Exception {
 
 	/**
 	 * Konstruktor, der den Meldungstext und ein Array der betroffenen Elemente
-	 * übernimmt.
+	 * Ã¼bernimmt.
 	 *
 	 * @param meldung
 	 *            die Meldung
