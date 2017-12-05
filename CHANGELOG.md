@@ -1,6 +1,10 @@
 Versionsverlauf
 =============================================
 
+## Version 1.2.0
+
+- Umstellung auf Gradle-Build für die NERZ-Repository-Veröffentlichtung
+
 ## Version 1.0.2
 
 Funktion "bereinigeMenge" verwendet die Elemente aus der Menge.
