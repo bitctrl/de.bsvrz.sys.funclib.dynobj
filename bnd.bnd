@@ -1,0 +1,7 @@
+-exportcontents: de.bsvrz.sys.funclib.dynobj.*
+-sources: true
+
+Bundle-Name: Funktionsbibliothek dynamische Objekte
+Import-Package: *
+Bundle-Vendor: BitCtrl Systems GmbH
+

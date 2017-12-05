@@ -1,0 +1,45 @@
+plugins {
+  id "de.bsvrz.gradle.nerzswe" version "0.2.0"
+  id "com.jfrog.bintray" version "1.8.0"
+  id "biz.aQute.bnd.builder" version "3.3.0"
+}
+
+group = 'de.bsvrz.sys'
+version = '1.2.0'
+description = 'Funktionsbibliothek dynamische Objekte'
+
+nerzswe {
+   	sweStatus = 'FREI'
+	sweDatum = '2017-12-05'
+}
+
+repositories {
+    maven { url 'http://dl.bintray.com/bitctrl/maven' }
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'de.bsvrz.dav', name: 'de.bsvrz.dav.daf', version:'3.8.0'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+}
+
+/* lokales Maven-Repositiory im build-Verzeichnis */
+publishing {
+	repositories {
+		maven {
+        	url "$buildDir/repo"         
+        }
+    }
+}
+
+/* Veröffentlichung auf bintray. */
+bintray {
+	user = project.hasProperty('user') ? property('user') : ""
+    key = project.hasProperty('key') ? property('key') : ""
+	publications = ['mavenJava']
+    pkg {
+    	userOrg = 'bitctrl'
+        repo = 'maven'
+        name = 'de.bsvrz.sys.funclib.dynobj'
+    }
+}

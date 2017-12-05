@@ -1,0 +1,6 @@
+ibv-simbaustelle-build:
+    image: 
+        oracle/openjdk
+    script:
+      - ./gradlew build
+
