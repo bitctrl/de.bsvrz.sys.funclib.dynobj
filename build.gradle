@@ -1,6 +1,7 @@
 plugins {
   id "de.bsvrz.gradle.nerzswe" version "0.2.0"
   id "com.jfrog.bintray" version "1.8.0"
+  id "biz.aQute.bnd.builder" version "3.3.0"
 }
 
 group = 'de.bsvrz.sys'
