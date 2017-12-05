@@ -5,11 +5,11 @@ plugins {
 }
 
 group = 'de.bsvrz.sys'
-version = '1.2.0-SNAPSHOT'
+version = '1.2.0'
 description = 'Funktionsbibliothek dynamische Objekte'
 
 nerzswe {
-   	sweStatus = 'BETA'
+   	sweStatus = 'FREI'
 	sweDatum = '2017-12-05'
 }
 
