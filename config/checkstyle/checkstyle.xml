@@ -143,7 +143,7 @@
   <module name="Translation"/>
   <module name="FileLength"/>
   <module name="Header">
-    <property name="headerFile" value="${basedir}/releng/java.header"/>
+    <property name="headerFile" value="${config_loc}/java.header"/>
     <property name="fileExtensions" value="java"/>
   </module>
   <module name="NewlineAtEndOfFile">

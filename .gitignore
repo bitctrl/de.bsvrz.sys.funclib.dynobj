@@ -1,0 +1,9 @@
+/.settings/
+/.gradle/
+/target/
+/bin/
+/build/
+.checkstyle
+.classpath
+.pmd
+.project
