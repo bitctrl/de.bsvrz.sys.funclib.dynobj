@@ -1,6 +1,10 @@
 Versionsverlauf
 =============================================
 
+## Version 1.3.0
+
+- Downgrade der Abhängigkeiten auf Kernsoftware 3.6.
+
 ## Version 1.2.0
 
 - Umstellung auf Gradle-Build für die NERZ-Repository-Veröffentlichtung
