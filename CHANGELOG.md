@@ -1,6 +1,10 @@
 Versionsverlauf
 =============================================
 
+## Version 1.3.1
+
+- Downgrade der Abhängigkeiten auf Kernsoftware 3.4+
+
 ## Version 1.3.0
 
 - Downgrade der Abhängigkeiten auf Kernsoftware 3.6.
