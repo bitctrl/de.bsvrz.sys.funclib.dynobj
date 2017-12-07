@@ -2,5 +2,5 @@
 -sources: true
 
 Bundle-Name: Funktionsbibliothek dynamische Objekte
-Import-Package: de.bsvrz.*; version="${range;[3,4)}",
+Import-Package: de.bsvrz.*; version=!
 Bundle-Vendor: BitCtrl Systems GmbH
